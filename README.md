@@ -6,12 +6,19 @@ A common problem when creating models to generate business value from data is th
 An online data science training provider need to clean up one of their largest customer datasets. This dataset will eventually be used to predict whether their students are looking for a new job or not, information that they will then use to direct them to prospective recruiters.
 
 Specifically, they have set the following requirements:
+
 Columns containing categories with only two factors must be stored as Booleans (bool).
+
 Columns containing integers only must be stored as 32-bit integers (int32).
+
 Columns containing floats must be stored as 16-bit floats (float16).
+
 Columns containing nominal categorical data must be stored as the category data type.
+
 Columns containing ordinal categorical data must be stored as ordered categories, and not mapped to numerical values, with an order that reflects the natural order of the column.
+
 The DataFrame should be filtered to only contain students with 10 or more years of experience at companies with at least 1000 employees, as their recruiter base is suited to more experienced professionals at enterprise companies.
+
 
 The dataset is `customer_train.csv`, which is a subset of their entire customer dataset, so I can create a proof-of-concept of a much more efficient storage solution. The dataset contains anonymized student information, and whether they were looking for a new job or not during training:
 
