@@ -1,0 +1,41 @@
+Import necessary libraries
+import pandas as pd
+# Load the dataset
+ds_jobs = pd.read_csv("customer_train.csv")
+#Identify object data type to transforme as ordinal, nominal anda two-factor categories
+for col in ds_jobs.select_dtypes("object").columns:
+    print(ds_jobs_transformed[col].value_counts(), '\n')
+#A dictionary of columns with ordered categorical data
+ordinal_cat = {
+'experience': ['<1'] + list(map(str, range(1, 21))) + ['>20'],
+'company_size' : ['<10', '10-49', '50-99', '100-499', '500-999', '1000-4999', '5000-9999', '10000+'],
+'last_new_job' : ['1', '2', '3', '4', '>4'],
+'enrolled_university' : ['no_enrollment', 'Part time course', 'Full time course'],
+'education_level' : ['Primary School','High School', 'Graduate','Masters','Phd']
+}
+#A dictionary with two factor categories 
+two_factors_cat = {
+'relevant_experience' : {'No relevant experience' : False, 'Has relevant experience' : True},
+'job_change' : { 0.0 : False, 1.0 : True}
+}
+#Change data object types to bolean
+for col in ds_jobs_transformed:
+
+    if col in ['relevant_experience', 'job_change']:
+        ds_jobs_transformed[col] = ds_jobs_transformed[col].map(two_factors_cat)
+
+    elif col in ordinal_cat.keys():
+        ds_jobs_transformed[col] = ds_jobs_transformed[col].astype('category')
+        category = pd.CategoricalDtype(ordinal_cat[col], ordered = True)
+
+    elif col in ['student_id', 'training_hours']:
+        ds_jobs_transformed[col] = ds_jobs_transformed[col].astype('int32')
+
+    elif col in ['city_development_index']:
+        ds_jobs_transformed[col] = ds_jobs_transformed[col].astype('float16')
+
+    else:
+        ds_jobs_transformed[col] = ds_jobs_transformed[col].astype('category')
+#Filter for students with 10 or more years of experience at companies with at least 1000 employees
+filtered_students = ds_jobs_transformed[(ds_jobs_transformed['experience'] >= '10') & (ds_jobs_transformed['company_size'] >= '1000-4999')]
+print('The qualifying students are:',filtered_students)
